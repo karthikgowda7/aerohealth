@@ -1,8 +1,8 @@
 # AeroHealth: Turbofan Engine Health Monitoring & Predictive Maintenance
 
-![CI](https://github.com/YOUR_GITHUB_USERNAME/aerohealth/actions/workflows/ci.yml/badge.svg)
+![CI](https://github.com/karthikgowda7/aerohealth/actions/workflows/ci.yml/badge.svg)
 
-**Live demo:** https://YOUR-APP.vercel.app
+**Live demo:** https://aerohealth-three.vercel.app/
 
 A dashboard for a fleet of 100 simulated turbofan engines. It predicts each engine's
 **Remaining Useful Life (RUL)**, flags **sensor anomalies**, classifies engines as
