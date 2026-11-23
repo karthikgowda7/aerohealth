@@ -1,0 +1,100 @@
+{
+  "version": "rf-v1",
+  "algorithm": "RandomForestRegressor (200 trees, max_depth 15)",
+  "dataset": "NASA C-MAPSS FD001",
+  "rulCap": 125,
+  "window": 10,
+  "features": [
+    "cycle",
+    "s2",
+    "s3",
+    "s4",
+    "s7",
+    "s8",
+    "s9",
+    "s11",
+    "s12",
+    "s13",
+    "s14",
+    "s15",
+    "s17",
+    "s20",
+    "s21",
+    "s2_mean",
+    "s3_mean",
+    "s4_mean",
+    "s7_mean",
+    "s8_mean",
+    "s9_mean",
+    "s11_mean",
+    "s12_mean",
+    "s13_mean",
+    "s14_mean",
+    "s15_mean",
+    "s17_mean",
+    "s20_mean",
+    "s21_mean",
+    "s2_std",
+    "s3_std",
+    "s4_std",
+    "s7_std",
+    "s8_std",
+    "s9_std",
+    "s11_std",
+    "s12_std",
+    "s13_std",
+    "s14_std",
+    "s15_std",
+    "s17_std",
+    "s20_std",
+    "s21_std"
+  ],
+  "rmse": 18.02,
+  "nasaScore": 737.1,
+  "lrRmse": 21.42,
+  "lrNasaScore": 1447.4,
+  "meanRmse": 41.94,
+  "importances": [
+    {
+      "feature": "s4_mean",
+      "importance": 0.6297
+    },
+    {
+      "feature": "cycle",
+      "importance": 0.1273
+    },
+    {
+      "feature": "s11_mean",
+      "importance": 0.0318
+    },
+    {
+      "feature": "s15_mean",
+      "importance": 0.0295
+    },
+    {
+      "feature": "s9_mean",
+      "importance": 0.0255
+    },
+    {
+      "feature": "s2_mean",
+      "importance": 0.0231
+    },
+    {
+      "feature": "s14_mean",
+      "importance": 0.0156
+    },
+    {
+      "feature": "s3_mean",
+      "importance": 0.0109
+    },
+    {
+      "feature": "s9",
+      "importance": 0.0076
+    },
+    {
+      "feature": "s21_mean",
+      "importance": 0.0063
+    }
+  ],
+  "trainedAt": "2026-11-23T10:14:13.407548+00:00"
+}
