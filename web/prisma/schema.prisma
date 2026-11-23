@@ -1,0 +1,123 @@
+// AeroHealth database schema (Prisma 6 + PostgreSQL on Neon)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // Neon POOLED connection string (used by the app)
+  directUrl = env("DIRECT_URL")   // Neon DIRECT connection string (used by db push)
+}
+
+enum HealthStatus {
+  HEALTHY
+  WATCH
+  CRITICAL
+}
+
+enum AlertSeverity {
+  WARNING
+  CRITICAL
+}
+
+enum WorkOrderStatus {
+  OPEN
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  AOG // Aircraft On Ground: the most urgent
+}
+
+model Engine {
+  id           String       @id @default(cuid())
+  serial       String       @unique // "ESN-001"
+  unitNumber   Int          @unique // C-MAPSS unit id
+  currentCycle Int
+  predictedRul Float
+  trueRul      Float
+  status       HealthStatus
+  readings     Reading[]
+  alerts       Alert[]
+  workOrders   WorkOrder[]
+  createdAt    DateTime     @default(now())
+
+  @@index([status])
+}
+
+// One row per engine per flight cycle: 14 sensors + the model's RUL prediction.
+model Reading {
+  id           Int    @id @default(autoincrement())
+  engineId     String
+  engine       Engine @relation(fields: [engineId], references: [id], onDelete: Cascade)
+  cycle        Int
+  s2           Float
+  s3           Float
+  s4           Float
+  s7           Float
+  s8           Float
+  s9           Float
+  s11          Float
+  s12          Float
+  s13          Float
+  s14          Float
+  s15          Float
+  s17          Float
+  s20          Float
+  s21          Float
+  predictedRul Float
+  trueRul      Float
+
+  @@unique([engineId, cycle]) // also works as the index for time-series reads
+}
+
+model Alert {
+  id           String        @id @default(cuid())
+  engineId     String
+  engine       Engine        @relation(fields: [engineId], references: [id], onDelete: Cascade)
+  cycle        Int
+  sensor       String
+  value        Float
+  zScore       Float
+  severity     AlertSeverity
+  acknowledged Boolean       @default(false)
+  createdAt    DateTime      @default(now())
+
+  @@index([engineId, acknowledged])
+}
+
+model WorkOrder {
+  id          String          @id @default(cuid())
+  engineId    String
+  engine      Engine          @relation(fields: [engineId], references: [id], onDelete: Restrict)
+  title       String
+  description String?
+  priority    Priority        @default(MEDIUM)
+  status      WorkOrderStatus @default(OPEN)
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+  closedAt    DateTime?
+
+  @@index([status])
+}
+
+model ModelRun {
+  id          String   @id @default(cuid())
+  version     String   @unique // "rf-v1"
+  algorithm   String
+  dataset     String
+  features    String[]
+  rmse        Float
+  nasaScore   Float
+  lrRmse      Float // Linear Regression baseline
+  lrNasaScore Float
+  meanRmse    Float // "always predict the average" baseline
+  importances Json // [{ feature, importance }] top 10
+  trainedAt   DateTime
+}
